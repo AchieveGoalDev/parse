@@ -1,16 +1,6 @@
 import json
 
 validChar = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',' ']
-testDict = {
-    'one': 1,
-    'two': 2,
-    'three': 3,
-    'four' : 4,
-    'nine' : 9,
-    'twenty' : 20,
-    'fifteen' : 15
-}
-
 
 class Parser:
     def listifyMe(txt):
@@ -75,7 +65,8 @@ class Parser:
         return wordList
 
 class Codex:
-    def __init__(self, wordDict):
+    def __init__(self, wordList, wordDict):
+        self.wordList = wordList
         self.wordDict = wordDict
     
     def zipfCount(list):
@@ -89,11 +80,11 @@ class Codex:
     def sortDict(dict):
         newDict= {}
         passNo = 0
+        listLen = len(dict)
         while dict != {}:
-            passNo = 0
             greatestValue = 0
             greatestKey = ''
-            print('This is pass number ' +str(passNo) + ' out of' + str(len(dict)))
+            print('This is pass number ' +str(passNo) + ' out of' + str(listLen))
             for key in dict.keys():
                 if dict[key] > greatestValue:
                     greatestValue = dict[key]
@@ -118,19 +109,20 @@ class Codex:
 
 def main():
     try:
-        bigTxt = open('androids.txt','r', encoding='ascii', errors='ignore')
+        bigTxt = open('lovecraft.txt','r', encoding='ascii', errors='ignore')
         bigTxt = bigTxt.read()
     except:
         print('Unicode crap')
 
     parsedList = Parser.fullParse(bigTxt)
-     
+    
     countThis = Codex.dictify(parsedList)
     sortThis = Codex.sortDict(countThis)
-    print(sortThis)
 
-    with open('data.txt', 'w') as outfile:
-        json.dump(sortThis, outfile)
+    lovecraft = Codex(parsedList, sortThis)
+
+    with open('lovecraftdata.txt', 'w') as outfile:
+        json.dump(lovecraft.wordDict, outfile, indent=4)
 
 def debug():
 
